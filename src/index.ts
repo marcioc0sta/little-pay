@@ -2,8 +2,10 @@ import express, { Express, Request, Response } from 'express'
 import bodyParser from 'body-parser'
 import helmet from 'helmet'
 import dotenv from 'dotenv'
-import { Account, Event } from './types'
+import { Account } from './types'
+import { createOrUpdate } from './domains/event'
 import { CustomRequest } from './interfaces'
+import { Event } from './domains/event/types/Event.type'
 
 dotenv.config()
 
@@ -27,32 +29,12 @@ app.post('/reset', (_: Request, res: Response) => {
 })
 
 app.post('/event', (req: CustomRequest<Event>, res: Response) => {
-  const { destination, amount } = req.body
-  const destinationAccIdx = accounts.findIndex(acc => acc.id === destination)
+  const { destination: id, amount: balance } = req.body
 
-  // updated ecc
-  if (destinationAccIdx !== -1) {
-    accounts[destinationAccIdx] = {
-      id: destination,
-      balance: accounts[destinationAccIdx].balance + amount,
-    }
-
-    res.status(201)
-    res.send({ destination: { id: destination, balance: amount } })
-    return
-  }
-
-  // new acc
-  accounts = [
-    ...accounts,
-    {
-      id: destination,
-      balance: amount,
-    },
-  ]
+  accounts = createOrUpdate(accounts, req.body)
 
   res.status(201)
-  res.send({ destination: { id: destination, balance: amount } })
+  res.send({ destination: { id, balance } })
 })
 
 app.listen(PORT, () => console.log(`Running on ${PORT} ⚡`))
