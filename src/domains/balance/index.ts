@@ -1,5 +1,7 @@
-import { Account } from '../../types'
 import { Request, Response } from 'express'
+
+import { Account } from '../../types'
+
 import { Balance } from './types/Balance.type'
 
 function getBalance(accounts: Array<Account>, req: Request, res: Response) {
