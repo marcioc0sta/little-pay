@@ -1,11 +1,12 @@
-import express, { Express, Request, Response } from 'express'
 import bodyParser from 'body-parser'
-import helmet from 'helmet'
 import dotenv from 'dotenv'
-import { Account } from './types'
+import express, { Express, Request, Response } from 'express'
+import helmet from 'helmet'
+
 import { createOrUpdate } from './domains/event'
-import { CustomRequest } from './interfaces'
 import { Event } from './domains/event/types/Event.type'
+import { CustomRequest } from './interfaces'
+import { Account } from './types'
 
 dotenv.config()
 

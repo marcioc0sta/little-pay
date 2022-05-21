@@ -1,5 +1,6 @@
-import { Event } from './types/Event.type'
 import { Account } from '../../types'
+
+import { Event } from './types/Event.type'
 
 function createOrUpdate(accounts: Array<Account>, event: Event) {
   const { destination, amount } = event
