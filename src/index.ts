@@ -2,6 +2,8 @@ import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
 import express, { Express, Request, Response } from 'express'
 import helmet from 'helmet'
+import getBalance from './domains/balance'
+import { Balance } from './domains/balance/types/Balance.type'
 
 import { createOrUpdate } from './domains/event'
 import { Event } from './domains/event/types/Event.type'
@@ -27,6 +29,10 @@ app.post('/reset', (_: Request, res: Response) => {
   accounts = []
   res.status(200)
   res.send(accounts)
+})
+
+app.get('/balance', (req: Request, res: Response) => {
+  getBalance(accounts, req, res)
 })
 
 app.post('/event', (req: CustomRequest<Event>, res: Response) => {
