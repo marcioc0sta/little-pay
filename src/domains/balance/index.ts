@@ -1,21 +1,19 @@
-import { Request, Response } from 'express'
-
 import { Account } from '../../types'
 
-import { Balance } from './types/Balance.type'
-
-function getBalance(accounts: Array<Account>, req: Request, res: Response) {
-  const { account_id } = req.query as Balance
+function getBalance(
+  accounts: Array<Account>,
+  account_id: string,
+  // eslint-disable-next-line no-unused-vars
+  respond: (status: number, endpointResponse: string) => void
+) {
   const accountFound = accounts.find(acc => acc.id === account_id)
 
   if (!accountFound) {
-    res.status(404)
-    res.send('0')
+    respond(404, '0')
     return
   }
 
-  res.status(200)
-  res.send(`${accountFound.balance}`)
+  respond(200, `${accountFound.balance}`)
 }
 
 export default getBalance

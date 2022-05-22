@@ -31,7 +31,13 @@ app.post('/reset', (_: Request, res: Response) => {
 })
 
 app.get('/balance', (req: Request, res: Response) => {
-  getBalance(accounts, req, res)
+  const respond = (status: number, endpointResponse: string) => {
+    res.status(status)
+    res.send(endpointResponse)
+  }
+  const { account_id } = req.query as unknown as string
+
+  getBalance(accounts, account_id, respond)
 })
 
 app.post('/event', (req: CustomRequest<Event>, res: Response) => {
