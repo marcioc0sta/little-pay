@@ -6,6 +6,7 @@ import helmet from 'helmet'
 import getBalance from './domains/balance'
 import eventHandler from './domains/event'
 import { Event } from './domains/event/types/Event.type'
+import EventResponse from './domains/event/types/EventResponse.type'
 import { CustomRequest } from './interfaces'
 import { Account } from './types'
 
@@ -35,13 +36,20 @@ app.get('/balance', (req: Request, res: Response) => {
     res.status(status)
     res.send(endpointResponse)
   }
-  const { account_id } = req.query as unknown as string
+  const id = req.query.account_id as unknown as string
 
-  getBalance(accounts, account_id, respond)
+  getBalance(accounts, id, respond)
 })
 
 app.post('/event', (req: CustomRequest<Event>, res: Response) => {
-  accounts = eventHandler(accounts, req, res)
+  const respond = (
+    status: number,
+    endpointResponse: EventResponse | string
+  ) => {
+    res.status(status)
+    res.send(endpointResponse)
+  }
+  accounts = eventHandler(accounts, req, respond)
 })
 
 app.listen(PORT, () => console.log(`Running on ${PORT} ⚡`))

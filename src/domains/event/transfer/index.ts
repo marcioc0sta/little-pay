@@ -1,13 +1,13 @@
-import { Response } from 'express'
-
 import { CustomRequest } from '../../../interfaces'
 import { Account } from '../../../types'
 import { Event } from '../types/Event.type'
+import EventResponse from '../types/EventResponse.type'
 
 function transfers(
   accounts: Array<Account>,
   req: CustomRequest<Event>,
-  res: Response
+  // eslint-disable-next-line no-unused-vars
+  respond: (status: number, endpointResponse: EventResponse | string) => void
 ) {
   const { origin, amount, destination } = req.body
   const orgnAccIdx = accounts.findIndex(acc => acc.id === origin)
@@ -16,8 +16,7 @@ function transfers(
   const dstNotFound = dstAccIdx === -1
 
   if (orgnNotFound) {
-    res.status(404)
-    res.send('0')
+    respond(404, '0')
     return accounts
   }
 
@@ -44,20 +43,22 @@ function transfers(
     operateAccBalance(orgnAccIdx, orgnUpdatedBalance)
     createDstAccount()
 
-    res.status(201)
-    res.send({
-      origin: { id: origin, balance: orgnUpdatedBalance },
+    respond(201, {
+      origin: { id: origin ?? '', balance: orgnUpdatedBalance },
       destination: { id: destination, balance: amount },
     })
+
     return accounts
   }
 
   operateAccBalance(orgnAccIdx, orgnUpdatedBalance)
   operateAccBalance(dstAccIdx, accounts[dstAccIdx].balance + amount)
 
-  res.status(201)
-  res.send({
-    origin: { id: origin, balance: accounts[orgnAccIdx].balance - amount },
+  respond(201, {
+    origin: {
+      id: origin ?? '',
+      balance: accounts[orgnAccIdx].balance - amount,
+    },
     destination: {
       id: destination,
       balance: accounts[dstAccIdx].balance + amount,

@@ -1,13 +1,13 @@
-import { Response } from 'express'
-
 import { CustomRequest } from '../../../interfaces'
 import { Account } from '../../../types'
 import { Event } from '../types/Event.type'
+import EventResponse from '../types/EventResponse.type'
 
 function createOrUpdate(
   accounts: Array<Account>,
   req: CustomRequest<Event>,
-  res: Response
+  // eslint-disable-next-line no-unused-vars
+  respond: (status: number, endpointResponse: EventResponse) => void
 ) {
   const { destination, amount } = req.body
   const destinationAccIdx = accounts.findIndex(acc => acc.id === destination)
@@ -22,8 +22,7 @@ function createOrUpdate(
       balance,
     }
 
-    res.status(201)
-    res.send({
+    respond(201, {
       destination: { id: destination, balance },
     })
 
@@ -38,8 +37,9 @@ function createOrUpdate(
     },
   ]
 
-  res.status(201)
-  res.send({ destination: { id: destination, balance: amount } })
+  respond(201, {
+    destination: { id: destination, balance: amount },
+  })
 
   return accounts
 }

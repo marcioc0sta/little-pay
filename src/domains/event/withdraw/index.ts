@@ -1,21 +1,20 @@
-import { Response } from 'express'
-
 import { CustomRequest } from '../../../interfaces'
 import { Account } from '../../../types'
 import { Event } from '../types/Event.type'
+import EventResponse from '../types/EventResponse.type'
 
 function withdrawals(
   accounts: Array<Account>,
   req: CustomRequest<Event>,
-  res: Response
+  // eslint-disable-next-line no-unused-vars
+  respond: (status: number, endpointResponse: EventResponse | string) => void
 ) {
   const { origin, amount } = req.body
   const originAccIdx = accounts.findIndex(acc => acc.id === origin)
   const accNotFound = originAccIdx === -1
 
   if (accNotFound) {
-    res.status(404)
-    res.send('0')
+    respond(404, '0')
     return accounts
   }
 
@@ -27,8 +26,7 @@ function withdrawals(
     balance: updatedBalance,
   }
 
-  res.status(201)
-  res.send({ origin: { id: origin, balance: updatedBalance } })
+  respond(201, { origin: { id: origin ?? '', balance: updatedBalance } })
 
   return accounts
 }
