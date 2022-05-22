@@ -1,5 +1,3 @@
-import { Response } from 'express'
-
 import { CustomRequest } from '../../interfaces'
 import { Account } from '../../types'
 
