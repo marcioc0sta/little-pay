@@ -5,6 +5,7 @@ import { Account } from '../../types'
 
 import createOrUpdate from './createOrUpdate'
 import { Event } from './types/Event.type'
+import withdrawals from './withdraw'
 
 function eventHandler(
   accounts: Array<Account>,
@@ -13,7 +14,7 @@ function eventHandler(
 ) {
   const eventDispatchers = {
     deposit: createOrUpdate,
-    withdraw: () => accounts, // TODO: handle withdrawals
+    withdraw: withdrawals, // TODO: handle withdrawals
     transfer: () => accounts, // TODO: handle transfers
   }
 
