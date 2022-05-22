@@ -4,7 +4,7 @@ import express, { Express, Request, Response } from 'express'
 import helmet from 'helmet'
 
 import getBalance from './domains/balance'
-import { createOrUpdate } from './domains/event'
+import eventHandler from './domains/event'
 import { Event } from './domains/event/types/Event.type'
 import { CustomRequest } from './interfaces'
 import { Account } from './types'
@@ -35,12 +35,7 @@ app.get('/balance', (req: Request, res: Response) => {
 })
 
 app.post('/event', (req: CustomRequest<Event>, res: Response) => {
-  const { destination: id, amount: balance } = req.body
-
-  accounts = createOrUpdate(accounts, req.body)
-
-  res.status(201)
-  res.send({ destination: { id, balance } })
+  accounts = eventHandler(accounts, req, res)
 })
 
 app.listen(PORT, () => console.log(`Running on ${PORT} ⚡`))

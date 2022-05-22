@@ -1,31 +1,23 @@
+import { Response } from 'express'
+
+import { CustomRequest } from '../../interfaces'
 import { Account } from '../../types'
 
+import createOrUpdate from './createOrUpdate'
 import { Event } from './types/Event.type'
 
-function createOrUpdate(accounts: Array<Account>, event: Event) {
-  const { destination, amount } = event
-  const destinationAccIdx = accounts.findIndex(acc => acc.id === destination)
-
-  // updated ecc
-  if (destinationAccIdx !== -1) {
-    accounts[destinationAccIdx] = {
-      id: destination,
-      balance: accounts[destinationAccIdx].balance + amount,
-    }
-
-    return accounts
+function eventHandler(
+  accounts: Array<Account>,
+  req: CustomRequest<Event>,
+  res: Response
+) {
+  const eventDispatchers = {
+    deposit: createOrUpdate,
+    withdraw: () => accounts, // TODO: handle withdrawals
+    transfer: () => accounts, // TODO: handle transfers
   }
 
-  // new acc
-  accounts = [
-    ...accounts,
-    {
-      id: destination,
-      balance: amount,
-    },
-  ]
-
-  return accounts
+  return eventDispatchers[req.body.type](accounts, req, res)
 }
 
-export { createOrUpdate }
+export default eventHandler
