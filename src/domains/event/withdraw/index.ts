@@ -25,7 +25,7 @@ function withdrawals(
     balance: updatedBalance,
   }
 
-  respond(201, { origin: { id: origin ?? '', balance: updatedBalance } })
+  respond(201, { origin: { id: origin, balance: updatedBalance } })
 
   return accounts
 }

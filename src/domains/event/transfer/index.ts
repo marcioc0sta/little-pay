@@ -43,7 +43,7 @@ function transfers(
     createDstAccount()
 
     respond(201, {
-      origin: { id: origin ?? '', balance: orgnUpdatedBalance },
+      origin: { id: origin, balance: orgnUpdatedBalance },
       destination: { id: destination, balance: amount },
     })
 
@@ -55,7 +55,7 @@ function transfers(
 
   respond(201, {
     origin: {
-      id: origin ?? '',
+      id: origin,
       balance: accounts[orgnAccIdx].balance - amount,
     },
     destination: {
