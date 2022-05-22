@@ -27,7 +27,7 @@ app.get('/', (_: Request, res: Response) => {
 app.post('/reset', (_: Request, res: Response) => {
   accounts = []
   res.status(200)
-  res.send(accounts)
+  res.send('OK')
 })
 
 app.get('/balance', (req: Request, res: Response) => {

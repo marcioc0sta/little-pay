@@ -15,13 +15,17 @@ function createOrUpdate(
   const accHasBeenFound = destinationAccIdx !== -1
 
   if (accHasBeenFound) {
+    const balance = acc.balance + amount
+
     accounts[destinationAccIdx] = {
       ...accounts[destinationAccIdx],
-      balance: acc.balance + amount,
+      balance,
     }
 
     res.status(201)
-    res.send({ destination: { id: destination, balance: amount } })
+    res.send({
+      destination: { id: destination, balance },
+    })
 
     return accounts
   }
