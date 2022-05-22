@@ -1,15 +1,14 @@
-import { CustomRequest } from '../../../interfaces'
 import { Account } from '../../../types'
 import { Event } from '../types/Event.type'
 import EventResponse from '../types/EventResponse.type'
 
 function transfers(
   accounts: Array<Account>,
-  req: CustomRequest<Event>,
+  event: Event,
   // eslint-disable-next-line no-unused-vars
   respond: (status: number, endpointResponse: EventResponse | string) => void
 ) {
-  const { origin, amount, destination } = req.body
+  const { origin, amount, destination } = event
   const orgnAccIdx = accounts.findIndex(acc => acc.id === origin)
   const dstAccIdx = accounts.findIndex(acc => acc.id === destination)
   const orgnNotFound = orgnAccIdx === -1

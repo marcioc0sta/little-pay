@@ -1,15 +1,14 @@
-import { CustomRequest } from '../../../interfaces'
 import { Account } from '../../../types'
 import { Event } from '../types/Event.type'
 import EventResponse from '../types/EventResponse.type'
 
 function createOrUpdate(
   accounts: Array<Account>,
-  req: CustomRequest<Event>,
+  event: Event,
   // eslint-disable-next-line no-unused-vars
   respond: (status: number, endpointResponse: EventResponse) => void
 ) {
-  const { destination, amount } = req.body
+  const { destination, amount } = event
   const destinationAccIdx = accounts.findIndex(acc => acc.id === destination)
   const acc = accounts[destinationAccIdx]
   const accHasBeenFound = destinationAccIdx !== -1

@@ -1,15 +1,14 @@
-import { CustomRequest } from '../../../interfaces'
 import { Account } from '../../../types'
 import { Event } from '../types/Event.type'
 import EventResponse from '../types/EventResponse.type'
 
 function withdrawals(
   accounts: Array<Account>,
-  req: CustomRequest<Event>,
+  event: Event,
   // eslint-disable-next-line no-unused-vars
   respond: (status: number, endpointResponse: EventResponse | string) => void
 ) {
-  const { origin, amount } = req.body
+  const { origin, amount } = event
   const originAccIdx = accounts.findIndex(acc => acc.id === origin)
   const accNotFound = originAccIdx === -1
 

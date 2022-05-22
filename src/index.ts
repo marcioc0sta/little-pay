@@ -49,7 +49,10 @@ app.post('/event', (req: CustomRequest<Event>, res: Response) => {
     res.status(status)
     res.send(endpointResponse)
   }
-  accounts = eventHandler(accounts, req, respond)
+
+  const event = req.body
+
+  accounts = eventHandler(accounts, event, respond)
 })
 
 app.listen(PORT, () => console.log(`Running on ${PORT} ⚡`))

@@ -1,6 +1,6 @@
 export type Event = {
   type: 'deposit' | 'withdraw' | 'transfer'
-  destination: string
+  destination?: string | any
   amount: number
-  origin?: string
+  origin: string
 }
