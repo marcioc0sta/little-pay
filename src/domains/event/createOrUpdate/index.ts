@@ -11,12 +11,13 @@ function createOrUpdate(
 ) {
   const { destination, amount } = req.body
   const destinationAccIdx = accounts.findIndex(acc => acc.id === destination)
+  const acc = accounts[destinationAccIdx]
+  const accHasBeenFound = destinationAccIdx !== -1
 
-  // updated ecc
-  if (destinationAccIdx !== -1) {
+  if (accHasBeenFound) {
     accounts[destinationAccIdx] = {
-      id: destination,
-      balance: accounts[destinationAccIdx].balance + amount,
+      ...accounts[destinationAccIdx],
+      balance: acc.balance + amount,
     }
 
     res.status(201)
@@ -25,7 +26,6 @@ function createOrUpdate(
     return accounts
   }
 
-  // new acc
   accounts = [
     ...accounts,
     {
