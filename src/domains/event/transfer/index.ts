@@ -10,10 +10,11 @@ function transfers(
   res: Response
 ) {
   const { origin, amount, destination } = req.body
-  const originAccIdx = accounts.findIndex(acc => acc.id === origin)
-  const destinationAccIdx = accounts.findIndex(acc => acc.id === destination)
-  const orgnNotFound = originAccIdx === -1
-  const dstNotFound = destinationAccIdx === -1
+  const orgnAccIdx = accounts.findIndex(acc => acc.id === origin)
+  const dstAccIdx = accounts.findIndex(acc => acc.id === destination)
+  const orgnNotFound = orgnAccIdx === -1
+  const dstNotFound = dstAccIdx === -1
+  const orgnInsuficientBalance = accounts[orgnAccIdx].balance - amount < 0
 
   if (orgnNotFound) {
     res.status(404)
@@ -21,7 +22,7 @@ function transfers(
     return accounts
   }
 
-  if (accounts[originAccIdx].balance - amount < 0) {
+  if (orgnInsuficientBalance) {
     res.status(403)
     res.send({
       illegalOperation: {
@@ -33,18 +34,16 @@ function transfers(
     return accounts
   }
 
-  const orgnUpdatedBalance = accounts[originAccIdx].balance - amount
+  const orgnUpdatedBalance = accounts[orgnAccIdx].balance - amount
 
-  const decreaseOrgn = () => {
-    accounts[originAccIdx] = {
-      ...accounts[originAccIdx],
-      balance: orgnUpdatedBalance,
+  const operateAccBalance = (accIdx: number, updatedBalance: number): void => {
+    accounts[accIdx] = {
+      ...accounts[accIdx],
+      balance: updatedBalance,
     }
   }
 
-  if (dstNotFound) {
-    decreaseOrgn()
-
+  const createDstAccount = (): void => {
     accounts = [
       ...accounts,
       {
@@ -52,6 +51,11 @@ function transfers(
         balance: amount,
       },
     ]
+  }
+
+  if (dstNotFound) {
+    operateAccBalance(orgnAccIdx, orgnUpdatedBalance)
+    createDstAccount()
 
     res.status(201)
     res.send({
@@ -61,19 +65,15 @@ function transfers(
     return accounts
   }
 
-  decreaseOrgn()
-
-  accounts[destinationAccIdx] = {
-    ...accounts[destinationAccIdx],
-    balance: accounts[destinationAccIdx].balance + amount,
-  }
+  operateAccBalance(orgnAccIdx, orgnUpdatedBalance)
+  operateAccBalance(dstAccIdx, accounts[dstAccIdx].balance + amount)
 
   res.status(201)
   res.send({
-    origin: { id: origin, balance: accounts[originAccIdx].balance - amount },
+    origin: { id: origin, balance: accounts[orgnAccIdx].balance - amount },
     destination: {
       id: destination,
-      balance: accounts[destinationAccIdx].balance + amount,
+      balance: accounts[dstAccIdx].balance + amount,
     },
   })
 
