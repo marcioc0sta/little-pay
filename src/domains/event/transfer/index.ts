@@ -14,23 +14,10 @@ function transfers(
   const dstAccIdx = accounts.findIndex(acc => acc.id === destination)
   const orgnNotFound = orgnAccIdx === -1
   const dstNotFound = dstAccIdx === -1
-  const orgnInsuficientBalance = accounts[orgnAccIdx].balance - amount < 0
 
   if (orgnNotFound) {
     res.status(404)
     res.send('0')
-    return accounts
-  }
-
-  if (orgnInsuficientBalance) {
-    res.status(403)
-    res.send({
-      illegalOperation: {
-        message:
-          'a conta de origem não tem saldo suficiente para esta operação',
-      },
-    })
-
     return accounts
   }
 

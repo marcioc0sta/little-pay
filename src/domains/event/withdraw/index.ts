@@ -22,18 +22,6 @@ function withdrawals(
   const accBalance = accounts[originAccIdx].balance
   const updatedBalance = accBalance - amount
 
-  if (updatedBalance < 0) {
-    res.status(403)
-    res.send({
-      illegalOperation: {
-        message:
-          'a conta de origem não tem saldo suficiente para esta operação',
-      },
-    })
-
-    return accounts
-  }
-
   accounts[originAccIdx] = {
     ...accounts[originAccIdx],
     balance: updatedBalance,
