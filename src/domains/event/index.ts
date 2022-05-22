@@ -3,7 +3,7 @@ import { Response } from 'express'
 import { CustomRequest } from '../../interfaces'
 import { Account } from '../../types'
 
-import createOrUpdate from './createOrUpdate'
+import createOrUpdateAcc from './createOrUpdateAcc'
 import { Event } from './types/Event.type'
 import withdrawals from './withdraw'
 
@@ -13,7 +13,7 @@ function eventHandler(
   res: Response
 ) {
   const eventDispatchers = {
-    deposit: createOrUpdate,
+    deposit: createOrUpdateAcc,
     withdraw: withdrawals, // TODO: handle withdrawals
     transfer: () => accounts, // TODO: handle transfers
   }
