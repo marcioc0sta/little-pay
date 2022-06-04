@@ -1,9 +1,9 @@
 ## Little Pay
 
 A small implamentation of deposits, withdrawals and transfers using node and TS.
-And the app is structured in a simple busness domain mindset, composed by
+The app was structured in a simple busness domain mindset, composed by
 **balance** and **event**. Things there are common between the domains must stay
-up on the **source(src)** directory.
+up to the **source(src)** directory.
 
 ## The stack:
 
