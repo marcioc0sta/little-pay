@@ -56,11 +56,11 @@ function transfers(
   respond(201, {
     origin: {
       id: origin,
-      balance: accounts[orgnAccIdx].balance - amount,
+      balance: accounts[orgnAccIdx].balance,
     },
     destination: {
       id: destination,
-      balance: accounts[dstAccIdx].balance + amount,
+      balance: accounts[dstAccIdx].balance,
     },
   })
 
